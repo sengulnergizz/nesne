@@ -1,0 +1,185 @@
+using System;
+using System.Collections.Generic;
+
+namespace KisiAracYonetimSistemi
+{
+    public class Kisi
+    {
+        private string Ad;
+        private string Soyad;
+        private int DogumYili;
+        private string TCKimlikNo;
+        private List<Arac> araclar = new List<Arac>();
+
+        public Kisi(string ad, string soyad, int dogumYili, string tc)
+        {
+            Ad = ad;
+            Soyad = soyad;
+            DogumYili = dogumYili;
+            TCKimlikNo = tc;
+        }
+
+        public string Adi { get { return Ad; } }
+        public string Soyadi { get { return Soyad; } }
+
+        public void AracEkle(Arac arac)
+        {
+            arac.SahipEkle(this);
+            araclar.Add(arac);
+        }
+
+        public void ArabalarimiListele()
+        {
+            Console.WriteLine("\n" + Ad + " " + Soyad + " adlı kişinin araç listesi:\n");
+            foreach (var arac in araclar)
+            {
+                arac.BilgiGoster();
+            }
+        }
+    }
+
+    public class Arac
+    {
+        public string SasiNo { get; set; }
+        public string Marka { get; set; }
+        public string Model { get; set; }
+        public int Yil { get; set; }
+        public string Tur { get; set; }
+        public DateTime EdinmeTarihi { get; set; }
+        public decimal EdinmeFiyati { get; set; }
+
+        private List<Kisi> sahipler = new List<Kisi>();
+
+        public void SahipEkle(Kisi kisi)
+        {
+            sahipler.Add(kisi);
+        }
+
+        public Kisi SuankiSahip()
+        {
+            return sahipler[sahipler.Count - 1];
+        }
+
+        public Kisi OncekiSahip()
+        {
+            if (sahipler.Count > 1)
+                return sahipler[sahipler.Count - 2];
+            else
+                return null;
+        }
+
+        public void BilgiGoster()
+        {
+            Kisi suanki = SuankiSahip();
+            Kisi onceki = OncekiSahip();
+
+            Console.WriteLine("Şasi Numarası: " + SasiNo);
+            Console.WriteLine("Sahibi: " + suanki.Adi + " " + suanki.Soyadi);
+            Console.WriteLine("Edinme Tarihi: " + EdinmeTarihi.ToShortDateString());
+            Console.WriteLine("Model Yılı: " + (onceki != null ? onceki.Adi : "Yok"));
+            Console.WriteLine("---------------------------");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Kişi Bilgilerini Giriniz:");
+            Console.Write("Ad: ");
+            string ad = Console.ReadLine();
+            Console.Write("Soyad: ");
+            string soyad = Console.ReadLine();
+            Console.Write("Doğum Yılı: ");
+            int dogumYili = int.Parse(Console.ReadLine());
+            Console.Write("TC Kimlik No: ");
+            string tc = Console.ReadLine();
+
+            Kisi sen = new Kisi(ad, soyad, dogumYili, tc);
+
+            for (int i = 1; i <= 4; i++)
+            {
+                Console.WriteLine("\n" + i + ". Aracın bilgilerini girin:");
+                Arac arac = new Arac();
+
+                Console.Write("Şasi No: ");
+                arac.SasiNo = Console.ReadLine();
+
+                Console.Write("Marka: ");
+                arac.Marka = Console.ReadLine();
+
+                Console.Write("Model: ");
+                arac.Model = Console.ReadLine();
+
+                Console.Write("Yıl: ");
+                arac.Yil = int.Parse(Console.ReadLine());
+
+                Console.Write("Tür (Taksi, Kamyon, Otobüs vb): ");
+                arac.Tur = Console.ReadLine();
+
+                Console.Write("Edinme Tarihi (gg.aa.yyyy): ");
+                arac.EdinmeTarihi = DateTime.Parse(Console.ReadLine());
+
+                Console.Write("Edinme Fiyatı: ");
+                arac.EdinmeFiyati = decimal.Parse(Console.ReadLine());
+
+                // Önceki sahipleri oluştur
+                List<Kisi> eskiSahipler = SahipZinciriOlustur(i);
+                foreach (var sahip in eskiSahipler)
+                {
+                    arac.SahipEkle(sahip);
+                }
+
+                // Son sahip sensin
+                sen.AracEkle(arac);
+            }
+
+            Console.WriteLine("\nKomut giriniz (örnek: 'kisi arabalarimi listele'):");
+            string komut = Console.ReadLine().ToLower();
+
+            if (komut == "kisi arabalarimi listele" || komut == "kişi arabalarımı listele")
+            {
+                sen.ArabalarimiListele();
+            }
+            else
+            {
+                Console.WriteLine("Geçersiz komut.");
+            }
+
+            Console.WriteLine("\nProgramı kapatmak için bir tuşa bas...");
+            Console.ReadKey();
+        }
+
+        static List<Kisi> SahipZinciriOlustur(int aracIndex)
+        {
+            List<Kisi> sahipler = new List<Kisi>();
+            int sahipSayisi;
+
+            switch (aracIndex)
+            {
+                case 1:
+                    sahipSayisi = 3; // 4. sahip sensin
+                    break;
+                case 2:
+                    sahipSayisi = 4; // 5. sahip sensin
+                    break;
+                case 3:
+                    sahipSayisi = 5; // 6. sahip sensin
+                    break;
+                case 4:
+                    sahipSayisi = 2; // 3. sahip sensin
+                    break;
+                default:
+                    sahipSayisi = 0;
+                    break;
+            }
+
+            for (int i = 1; i <= sahipSayisi; i++)
+            {
+                sahipler.Add(new Kisi("Sahip" + i, "Soyad" + i, 1970 + i, "1000000000" + i));
+            }
+
+            return sahipler;
+        }
+    }
+}
