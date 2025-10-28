@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            insan Insan = new insan("nergiz");
+            Insan.isimgetir("şengül");
+        }
+    }
+    public class insan
+    {
+        string soyad;
+        string ad;
+        public insan(string babasoyad)
+        {
+            this.soyad = babasoyad;
+        }
+
+        public void isimgetir(string isim)
+        {
+            this.ad = isim;
+            Console.WriteLine($"ad: {ad} ,soyad: {soyad}");
+            Console.ReadKey();
+        }
+    }
+}//program.cs
+
+
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            insan Insan = new insan("nergiz");
+            Insan.isimgetir("şengül");
+        }
+    }
+}
+using System;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            insan Insan = new insan("nergiz");
+            Insan.isimgetir("şengül");
+        }
+    }
+}
+//insan.cs
