@@ -1,0 +1,31 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp3
+{
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            person p = new person { name = "sengul", surname = "nergiz" };
+            p.GösterIsimSoyisim1();
+            Console.ReadKey();
+        }
+    }
+    public class person
+    {
+        public string name, surname;
+
+        public void GösterIsimSoyisim1()
+        {
+            Console.WriteLine($"isim: {name} ,soyisim: {surname}");
+        }
+        public void GösterIsimSoyisim2()
+        {
+            Console.WriteLine($"isim: {name} ,soyisim: {surname}");
+        }
+    }
+}
